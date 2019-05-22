@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReviewMapper">
+ 	
+ 	
+	<resultMap id="reviewSelectMap" type="review">
+		<result property="score" column="SCORE" jdbcType="NUMERIC"/>
+		<result property="reviewNo" column="REVIEW_NO" jdbcType="NUMERIC"/>
+		<result property="reviewProdNo" column="PROD_NO" jdbcType="NUMERIC"/>
+		<result property="reviewTranNo" column="TRAN_NO" jdbcType="NUMERIC"/>
+		<result property="review" column="REVIEW" jdbcType="VARCHAR"/>
+		<result property="userId" column="user_id" jdbcType="VARCHAR"/>
+		<result property="regDate" column="reg_date" jdbcType="DATE"/>		
+	</resultMap>
+	
+	<!-- SQL : INSERT -->
+	<insert 	id="addReview"		parameterType="review" >
+	 	INSERT
+		INTO REVIEW( REVIEW_NO , PROD_NO , TRAN_NO ,REVIEW , SCORE , REG_DATE , USER_ID) 
+		VALUES	 (	seq_review_review_no.nextval , #{reviewProdNo} , #{reviewTranNo} , #{review:VARCHAR} , 
+					 <if test="score==0">null</if>
+					 <if test="score!=0">#{score}</if> ,
+					 SYSDATE , #{userId:VARCHAR})
+	 </insert>
+	 
+	 <select id="getReview" parameterType="int" resultMap="reviewSelectMap">
+		SELECT
+		REVIEW_NO , PROD_NO , TRAN_NO ,REVIEW , SCORE , REG_DATE , USER_ID
+		FROM REVIEW
+		WHERE TRAN_NO = #{value}
+	 </select>
+	 
+	 <select id="getReviewList" parameterType="map" resultMap="reviewSelectMap">
+		SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  					FROM		(
+	  						SELECT
+							REVIEW_NO, PROD_NO, TRAN_NO , REVIEW, SCORE, reg_date , USER_ID
+							FROM review
+							WHERE PROD_NO = #{product}
+	  						order by review_NO desc 
+	  					) inner_table
+						WHERE ROWNUM &lt;= #{search.endRowNum} )
+		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
+	</select>
+	
+	<select id="getReviewListbyUser" parameterType="map" resultMap="reviewSelectMap">
+		SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  					FROM		(
+	  						SELECT
+							REVIEW_NO, PROD_NO, TRAN_NO , REVIEW, SCORE, reg_date , USER_ID
+							FROM review
+							WHERE USER_ID = #{userId}
+	  						order by review_NO desc
+	  					) inner_table
+						WHERE ROWNUM &lt;= #{search.endRowNum} )
+		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
+	</select>
+	
+	<select  id="getTotalCountbyUser" parameterType="map"	 resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(	SELECT
+			REVIEW_NO, PROD_NO, TRAN_NO , REVIEW, SCORE, reg_date
+			FROM review
+			WHERE user_id = #{userId}
+	  		order by review_NO desc 
+	  				) countTable						
+	 </select>
+	 
+	 <select  id="getTotalCount" parameterType="map"	 resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(	SELECT
+			REVIEW_NO, PROD_NO, TRAN_NO , REVIEW, SCORE, reg_date
+			FROM review
+			WHERE PROD_NO = #{product}
+	  		order by review_NO desc 
+	  				) countTable						
+	 </select>
+	 
+</mapper>
