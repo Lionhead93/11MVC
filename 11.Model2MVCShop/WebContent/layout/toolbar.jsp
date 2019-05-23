@@ -64,12 +64,13 @@
 	               <c:if test="${sessionScope.user.role == 'admin'}">
 		              <li class="dropdown">
 		                     <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-		                         <span >판매상품관리</span>
+		                         <span >상품관리</span>
 		                         <span class="caret"></span>
 		                     </a>
 		                     <ul class="dropdown-menu">
 		                         <li><a href="#">판매상품등록</a></li>
 		                         <li><a href="#">판매상품관리</a></li>
+		                         <li><a href="#">배송관리</a></li>
 		                         <li class="divider"></li>
 		                         <li><a href="#">etc..</a></li>
 		                     </ul>
@@ -150,6 +151,10 @@
 				//$(self.location).attr("href","/user/logout");
 				self.location = "/product/listProduct?menu=manage"
 			});
+		 	$("a:contains('배송관리')").on("click" , function() {
+				//$(self.location).attr("href","/user/logout");
+				self.location = "/purchase/listPurchase?menu=manage"
+			});
 		 	$("a:contains('판매상품등록')").on("click" , function() {
 				//$(self.location).attr("href","/user/logout");
 				self.location = "../product/addProductView.jsp"
@@ -158,6 +163,15 @@
 		 	$( "a:contains('내정보조회')" ).on("click" , function() {
 		 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 				$(self.location).attr("href","/user/getUser?userId=${sessionScope.user.userId}");
+			});
+		
+		 	$( "a:contains('구매이력조회')" ).on("click" , function() {
+		 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+				$(self.location).attr("href","/purchase/listPurchase?menu=user");
+			});
+		 	$( "a:contains('내가 쓴 후기')" ).on("click" , function() {
+		 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+				$(self.location).attr("href","/product/listReviewByUser");
 			});
 		
 		 });

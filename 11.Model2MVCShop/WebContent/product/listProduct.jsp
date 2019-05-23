@@ -133,13 +133,32 @@
 															+"<div id='iprodNo' style='display:none'>"+product.prodNo+"</div>"
 															+"</span>"
 															+"<div id='"+product.prodNo+"' >"
-															+"<img class='img-circle' src='/images/uploadFiles/"+product.fileName+"' alt='Generic placeholder image' width='140' height='140'>"
+															+"<img class='img-circle' src='/images/uploadFiles/"+product.fileName+"' onerror='this.src="+"'/images/noimagesup.png'"+"' width='140' height='140'>"
 															+"<h2>"+product.prodName+"</h2>"
 															+"<p>"+product.prodDetail+"</p>"
 															+"<p>"+product.price+" 원</p>"
 															+"<p><a class='btn btn-default' href='#' role='button'>Show Detail &raquo;</a></p></div></div>";
 											
 											$("#prodRow").append(displayValue);
+											$("a[href='#' ]:contains('Show Detail')").off("click");
+											$("a[href='#' ]:contains('Show Detail')").on("click" , function(){
+												
+												prodNo = $(this).closest("div").attr("id").trim();
+												if(${!empty user}){
+													self.location = "/product/getProduct?menu=search&prodNo="+prodNo;
+												}else{
+													alert("로그인을 해주세요");
+												}
+											});
+											if(product.amount==0){
+												$("#"+product.prodNo+"").append("<p class='text-danger'>"
+										          +"<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>품절"
+										          +"<span class='glyphicon glyphicon-remove' aria-hidden='true'></span></p>")
+										          
+											}else{
+												$("#"+product.prodNo+"").append("<p class='text-success'>"
+												          +"<span class='glyphicon glyphicon-shopping-cart' aria-hidden='true'></span>구매가능</p>")
+											}
 										})
 										$("span[class='glyphicon glyphicon-eye-open']").off("click");
 										$("span[class='glyphicon glyphicon-eye-open']").on("click" , function(){
@@ -171,10 +190,30 @@
 															value = $("#"+prodNo+"").html();
 																	
 															$("#"+prodNo+"").html(displayValue);
+															$("a[href='#' ]:contains('Show Detail')").off("click");
+															$("a[href='#' ]:contains('Show Detail')").on("click" , function(){
+																
+																prodNo = $(this).closest("div").attr("id").trim();
+																if(${!empty user}){
+																	self.location = "/product/getProduct?menu=search&prodNo="+prodNo;
+																}else{
+																	alert("로그인을 해주세요");
+																}
+															});															
 															
 														}							 
 												});
 											
+										});
+										
+										event = false;
+									
+									}else{
+										
+										$("div[class='container marketing']").append("<div class='text-center'><button type='button' class='btn btn-danger'>맨 위로&uArr;"
+															+"</button></div>");
+										$("button:contains('맨 위로')").on("click" , function(){
+											$('html').scrollTop(0);
 										});
 										$("a[href='#' ]:contains('Show Detail')").off("click");
 										$("a[href='#' ]:contains('Show Detail')").on("click" , function(){
@@ -185,15 +224,6 @@
 											}else{
 												alert("로그인을 해주세요");
 											}
-										});
-										event = false;
-									
-									}else{
-										
-										$("div[class='container marketing']").append("<div class='text-center'><button type='button' class='btn btn-danger'>맨 위로&uArr;"
-															+"</button></div>");
-										$("button:contains('맨 위로')").on("click" , function(){
-											$('html').scrollTop(0);
 										});
 										$(window).off("scroll");
 										
@@ -261,19 +291,20 @@
 							
 							$("#"+prodNo+"").html(displayValue);
 							
+							$("a[href='#' ]:contains('Show Detail')").off("click");
+							$("a[href='#' ]:contains('Show Detail')").on("click" , function(){
+								
+								prodNo = $(this).closest("div").attr("id").trim();
+								
+								if(${!empty user}){
+									self.location = "/product/getProduct?menu=search&prodNo="+prodNo;
+								}else{
+									alert("로그인을 해주세요");
+								}
+							});
+							
 						}							 
-			});
-			$("a[href='#' ]:contains('Show Detail')").off("click");
-			$("a[href='#' ]:contains('Show Detail')").on("click" , function(){
-				
-				prodNo = $(this).closest("div").attr("id").trim();
-				
-				if(${!empty user}){
-					self.location = "/product/getProduct?menu=search&prodNo="+prodNo;
-				}else{
-					alert("로그인을 해주세요");
-				}
-			});
+			});			
 			
 		});
 		 $( "button:contains('검색')" ).on("click" , function() {
@@ -323,7 +354,7 @@
 		    	</span>
 		    	<span class="btn-group">
 					  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					   정렬하기 <span class="caret"></span>
+					   Sort <span class="caret"></span>
 					  </button>
 					  <ul class="dropdown-menu">
 					    <li><a href="#">낮은가격순</a></li>
@@ -386,11 +417,28 @@
           	<div id="iprodNo" style="display:none">${product.prodNo}</div>
           </span>
           <div id="${product.prodNo}">
-	          <img class="img-circle" src="/images/uploadFiles/${product.fileName}" alt="Generic placeholder image" width="140" height="140">
+	          <img class="img-circle" src="/images/uploadFiles/${product.fileName}" onerror="this.src='/images/noimagesup.png'" width="140" height="140">
 	          <h2>${product.prodName}</h2>         
 	          <p>${product.prodDetail}</p>
-	          <p>${product.price} 원</p>
+	          <p>${product.price} 원</p>	 
 	          <p><a class="btn btn-default" href="#" role="button">Show Detail &raquo;</a></p>
+	          
+		          <c:if test="${product.amount=='0'}">
+		          <p class="text-danger">
+		          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		          	품절
+		          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+		          </p>
+		          </c:if>
+		          <c:if test="${product.amount!='0'}">
+		          <p class="text-success">
+		          <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>	
+		          	구매가능	
+		          </p>
+		          </c:if>
+	                   
+	          
+	          
 			    	
 	      </div>
         </div><!-- /.col-lg-4 -->

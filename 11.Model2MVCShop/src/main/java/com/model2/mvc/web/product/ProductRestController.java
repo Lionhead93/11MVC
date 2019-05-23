@@ -74,7 +74,7 @@ public class ProductRestController {
 		System.out.println(data);
 		
 		return data;
-	}
+	}	
 	
 	@RequestMapping(value = "json/listProduct" ,method = RequestMethod.POST)
 	public Map<String, Object> listProduct( @RequestBody Search search ) throws Exception {
