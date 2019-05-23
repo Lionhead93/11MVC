@@ -82,7 +82,7 @@ public class ProductController {
 		System.out.println(product);
 		productService.addProduct(product);
 		
-		return "forward:/product/getProduct.jsp";
+		return "redirect:/product/listProduct?menu=manage";
 	}
 	
 	@RequestMapping("getProduct")
@@ -153,7 +153,7 @@ public class ProductController {
 		System.out.println("updateProduct.do/////////////");
 		System.out.println(uploadPath);
 		String MultifileName = "";
-		
+				
 		if(file[0].getOriginalFilename() != "") {
 			for(int i=0; i<file.length ; i++) {
 				System.out.println("fileChange");
@@ -169,6 +169,8 @@ public class ProductController {
 			}
 			product.setFileName(MultifileName);
 			System.out.println("파일이미지변경 : "+MultifileName);
+		}else {
+			product.setFileName(productService.getProduct(product.getProdNo()).getFileName());
 		}
 		
 		
