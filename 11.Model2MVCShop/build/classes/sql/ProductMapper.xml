@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductMapper">
+ 	
+ 	
+	<resultMap id="productSelectMap" type="product">
+		<result property="fileName" column="IMAGE_FILE" jdbcType="VARCHAR"/>
+		<result property="manuDate" column="MANUFACTURE_DAY" jdbcType="VARCHAR"/>
+		<result property="price" column="PRICE" jdbcType="NUMERIC"/>
+		<result property="prodDetail" column="PROD_DETAIL" jdbcType="VARCHAR"/>
+		<result property="prodName" column="PROD_NAME" jdbcType="VARCHAR"/>
+		<result property="prodNo" column="PROD_NO" jdbcType="NUMERIC"/>
+		<result property="regDate" column="REG_DATE" jdbcType="DATE"/>
+		<result property="proTranCode" column="tran_status_code" jdbcType="VARCHAR"/>
+		<result property="proTranNo" column="tran_no" jdbcType="VARCHAR"/>
+		<result property="amount" column="AMOUNT" jdbcType="NUMERIC"/>
+	</resultMap>
+	
+	<!-- SQL : INSERT -->
+	<insert 	id="addProduct"		parameterType="product" >
+	 	INSERT
+		INTO product( PROD_NO , PROD_NAME , PROD_DETAIL , MANUFACTURE_DAY , PRICE, IMAGE_FILE, REG_DATE, AMOUNT ) 
+		VALUES	 (	seq_product_prod_no.nextval , #{prodName:VARCHAR} , #{prodDetail:VARCHAR} , #{manuDate:VARCHAR} ,
+					 <if test="price==0">null</if>
+					 <if test="price!=0">#{price}</if> ,
+					#{fileName:VARCHAR} , SYSDATE ,
+					<if test="amount==0">null</if>
+					<if test="amount!=0">#{amount}</if>)
+	 </insert>
+	 
+	 <!-- SQL : SELECT ONE -->
+	 <select 	id="getProduct"	parameterType="int"	resultMap="productSelectMap">
+		SELECT
+		PROD_NO , PROD_NAME , PROD_DETAIL , MANUFACTURE_DAY ,  PRICE ,  IMAGE_FILE , REG_DATE , AMOUNT 		
+		FROM product 
+		WHERE PROD_NO = #{value}
+	 </select>
+	 
+	 <!-- SQL : UPDATE -->
+	 <update	id="updateProduct"	parameterType="product" >
+	   	UPDATE product
+	   	<set>
+	   		<if test="prodName != null">PROD_Name 	= #{prodName} ,</if>
+			<if test="prodDetail != null">PROD_detail = #{prodDetail},</if>
+			<if test="manuDate != null">manufacture_day	= #{manuDate} ,</if>
+			price	=	<if test="price != 0">#{price}</if>
+						<if test="price == 0">null</if>,
+			<if test="fileName != null">image_file = #{fileName},</if>
+			amount =    <if test="amount != 0">#{amount}</if>
+						<if test="amount == 0">null</if>
+	   	</set>
+	   	WHERE prod_no = #{prodNo}
+	 </update>
+	 
+	 <update id="updateAmount" parameterType="map">
+	 UPDATE product
+	 	<set>
+	 		amount = amount-#{amount}
+	 	</set>	 	
+	  where prod_no = #{prodNo}
+	 </update>	 
+	 
+	<select id="tagList" resultMap="productSelectMap">
+		SELECT prod_name FROM product
+	</select>
+	 
+	<!-- SQL : SELECT LIST -->
+	<select  id="getProductList"  parameterType="search"	resultMap="productSelectMap">
+	  	SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  					FROM		(	
+	  									SELECT prod_no, prod_name, prod_detail
+	  										, manufacture_day	, price, image_file
+	  										, reg_date, amount
+											FROM product
+																			
+										<where>
+										
+											<if test="searchCondition != null">												
+												<choose>	
+													<when test="searchCondition == 0 and searchKeyword !='' ">
+										 				prod_no like '%'||#{searchKeyword}||'%'
+													</when>
+													<when test="searchCondition == 1 and searchKeyword !='' ">
+										 				prod_name like '%'||#{searchKeyword}||'%'
+													</when>
+													<when test="searchCondition == 2 and searchKeyword !='' ">
+										 				price > #{searchKeyword}
+													</when>
+												</choose>											
+											</if>
+											<if test="tranWhere == 0">
+												and amount != 0
+											</if>												
+										</where>
+										<choose>
+											<when test="sortPrice == 'asc'">
+											ORDER BY price asc,prod_no
+											</when>
+											<when test="sortPrice == 'desc'">
+											ORDER BY price desc,prod_no
+											</when>
+											<otherwise>
+											ORDER BY prod_no
+											</otherwise>
+										</choose> 
+										) inner_table
+						WHERE ROWNUM &lt;= #{endRowNum} )
+		WHERE row_seq BETWEEN #{startRowNum} AND #{endRowNum} 
+	 </select>
+	 	<!--  위 두번째 subQuery 의  
+	 			WHERE ROWNUM &lt;= #{endRowNum} ) 는
+	 			WHERE ROWNUM <= #{endRowNum} ) 의미이며..
+	 			< 는 keyword 로 &lt; 를	사용.
+	 			
+	 			<![CDATA[  ~~~  ]]> 를 이용하여 아래와 같이 사용  할 수 있다.
+	 			CDATA ==> Character Data 의 의미 Java 에서 \n 같은 특수문자 처리  
+
+				WHERE ROWNUM <![CDATA[ <=]]> #{endRowNum} )
+		-->
+	
+	<!-- SQL : SELECT ROW Count -->	 
+	 <select  id="getTotalCount"  parameterType="search"	 resultType="int">
+	  	SELECT COUNT(*)
+	  	FROM(	SELECT prod_no, prod_name, prod_detail
+	  										, manufacture_day	, price, image_file
+	  										, reg_date, amount
+											FROM product
+																			
+										<where>
+										
+											<if test="searchCondition != null">												
+												<choose>	
+													<when test="searchCondition == 0 and searchKeyword !='' ">
+										 				prod_no like '%'||#{searchKeyword}||'%'
+													</when>
+													<when test="searchCondition == 1 and searchKeyword !='' ">
+										 				prod_name like '%'||#{searchKeyword}||'%'
+													</when>
+													<when test="searchCondition == 2 and searchKeyword !='' ">
+										 				price > #{searchKeyword}
+													</when>
+												</choose>											
+											</if>
+											<if test="tranWhere == 0">
+												and amount != 0
+											</if>											
+										</where>
+										<choose>
+											<when test="sortPrice == 'asc'">
+											ORDER BY price asc,prod_no
+											</when>
+											<when test="sortPrice == 'desc'">
+											ORDER BY price desc,prod_no
+											</when>
+											<otherwise>
+											ORDER BY prod_no
+											</otherwise>
+										</choose> ) countTable						
+	 </select>
+	 
+</mapper>

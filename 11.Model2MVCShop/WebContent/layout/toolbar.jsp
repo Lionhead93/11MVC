@@ -138,7 +138,7 @@
 		//============= 회원정보조회 Event  처리 =============	
 		 $(function() {
 			//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-		 	$("a:contains('내정보조회')").on("click" , function() {
+		 	$("a:contains('회원정보조회')").on("click" , function() {
 				//$(self.location).attr("href","/user/logout");
 				self.location = "/user/listUser"
 			}); 
@@ -155,7 +155,7 @@
 				self.location = "../product/addProductView.jsp"
 			});
 		//=============  개인정보조회회 Event  처리 =============	
-		 	$( "a:contains('개인정보조회')" ).on("click" , function() {
+		 	$( "a:contains('내정보조회')" ).on("click" , function() {
 		 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 				$(self.location).attr("href","/user/getUser?userId=${sessionScope.user.userId}");
 			});
