@@ -1,14 +1,47 @@
-<%@ page contentType="text/html; charset=euc-kr" %>
+<%@ page contentType="text/html; charset=EUC-KR" %>
+<%@ page pageEncoding="EUC-KR"%>
+
+<!--  ///////////////////////// JSTL  ////////////////////////// -->
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<html>
-<head>
-<title>구매 목록조회</title>
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript">
-	function fncGetList(currentPage) {
+<!DOCTYPE html>
+
+<html lang="ko">
+	
+<head>
+	<meta charset="EUC-KR">
+	
+	<!-- 참조 : http://getbootstrap.com/css/   참조 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	
+	
+	<!-- Bootstrap Dropdown Hover CSS -->
+   <link href="/css/animate.min.css" rel="stylesheet">
+   <link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+    <!-- Bootstrap Dropdown Hover JS -->
+   <script src="/javascript/bootstrap-dropdownhover.min.js"></script>
+    <!-- jQuery UI toolTip 사용 CSS-->
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <!-- jQuery UI toolTip 사용 JS-->
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<style>
+	  body {
+            padding-top : 50px;
+        }
+      .jumbotron {
+      		background-color : smokegrey;
+      }
+    </style>
+  <script type="text/javascript">
+  
+   function fncGetList(currentPage) {
 		
 		$("#currentPage").val(currentPage)
 		$("form").attr("method" , "POST").attr("action" , "/product/listReviewByUser").submit();
@@ -16,120 +49,97 @@
 	}
 	
 	$(function() {
-		
-		$( "td.ct_btn01:contains('이전')" ).on("click" , function() {
-			history.go(-1);
-		});	
-		$( ".ct_list_pop td:nth-child(1)" ).on("click" , function() {
-			var prodNo = $(this).text().trim();
-			self.location ="/product/getProduct?prodNo="+prodNo+"&menu=search";
-		});
-		$( ".ct_list_pop td:nth-child(1)" ).css("color" , "red");
-		
-	});
-
-</script>
-</head>
-
-<body bgcolor="#ffffff" text="#000000">
-
-<div style="width: 98%; margin-left: 10px;">
-
-<form name="detailForm">
-
-<table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
-	<tr>
-		<td width="15" height="37"><img src="/images/ct_ttl_img01.gif"width="15" height="37"></td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="93%" class="ct_ttl01">후기 작성 내역</td>
-				</tr>
-			</table>
-		</td>
-		<td width="12" height="37"><img src="/images/ct_ttl_img03.gif"	width="12" height="37"></td>
-	</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
-	<tr>
-		<td colspan="11" >전체 ${resultPage.totalCount} 건수, 현재 ${resultPage.currentPage} 페이지</td>
-	</tr>
-	<tr>
-		<td class="ct_list_b" width="50">상품번호 <br/>(click)</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">한줄평</td>
-		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">별점</td>
-		<td class="ct_line02"></td>	
-		<td class="ct_list_b" width="150">작성일</td>
-		<td class="ct_line02"></td>		
-	</tr>
-	<tr>
-		<td colspan="11" bgcolor="808285" height="1"></td>
-	</tr>
-	
-	<c:forEach var="p" items="${list}" varStatus="i">
-	<tr class="ct_list_pop">
-		<td align="center">
-			${p.reviewProdNo}
-		</td>
-		<td></td>
-		<td align="center">
-			${p.review}
-		</td>
-		<td></td>
-		<td align="center">${p.score}</td>
-		<td></td>
-		<td align="center">${p.regDate}</td>
-		<td></td>			
-	</tr>
-	<tr>
-		<td colspan="11" bgcolor="D6D7D6" height="1"></td>
-	</tr>
-	</c:forEach>
-	
-	
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
-	<tr>
-		<td width="53%"></td>
-		<td align="right">
-		<table border="0" cellspacing="0" cellpadding="0">
-			<tr>
 				
-				<td width="30"></td>
-				<td width="17" height="23">
-					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-				</td>
-				<td background="/images/ct_btnbg02.gif" class="ct_btn01"	 style="padding-top: 3px;">
-					이전
-				</td>
-				<td width="14" height="23">
-					<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-				</td>
-			</tr>
-		</table>
-		</td>
-	</tr>
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
-	<tr>
-		<td align="center">
-		   <input type="hidden" id="currentPage" name="currentPage" value=""/>
-		   
-			<jsp:include page="../common/pageNavigator.jsp"/>	
+		$("td[class='text-info']").on("click", function(){
 			
-    	</td>
-	</tr>
-</table>
+			var prodNo = $(this).text().trim();
+			self.location = "/product/getProduct?prodNo="+prodNo+"&menu=search";			
+			
+		});
+		
+		$("a[href='#']:contains('내 구매이력 보기')").on("click", function(){
+			
+			self.location = "/purchase/listPurchase?menu=user"
+			
+		});
+		$(".previous").on("click", function(){
+			
+			history.go(-1);
+			
+		});
+	});
+  
+  </script>
+  
+</head>
+<body>
+	
+<jsp:include page="/layout/toolbar.jsp" />
 
-<!--  페이지 Navigator 끝 -->
+<div class="container" >
+
+  <div class="page-header text-center">
+		
+	<div>
+	<h3><span class="text-info">
+		내 상품 리뷰
+	<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+	</span></h3>
+	</div>
+  </div>
+  <div class="col-md-6 text-left">
+		    	<span class="text-primary">
+		    		전체  ${resultPage.totalCount } 건수 <br/><br/>
+		    	</span>
+  </div>
+  
+  <table class="table table-hover table-striped" >
+  
+  		<thead>
+          <tr>
+            <th align="left">상품 번호</th>
+            <th align="left">한줄 평</th>
+            <th align="left" >별점</th>
+            <th align="left">작성일</th>
+          </tr>
+        </thead>
+  		<tbody>
+  			<c:forEach var="review" items="${list}">
+  			<tr>	
+  				<td align="left" class="text-info">
+  				<span class="glyphicon glyphicon-eye-open" id="${review.reviewProdNo}" aria-hidden="true"></span>
+  				${review.reviewProdNo}
+  				</td>
+  				<td align="left">${review.review}</td>
+			  	<td align="left" class="text-danger">
+				  	<c:if test="${review.score==1}">★☆☆☆☆</c:if>
+				  	<c:if test="${review.score==2}">★★☆☆☆</c:if>
+				  	<c:if test="${review.score==3}">★★★☆☆</c:if>
+				  	<c:if test="${review.score==4}">★★★★☆</c:if>
+				  	<c:if test="${review.score==5}">★★★★★</c:if>
+			  	</td>
+			  	<td align="left">${review.regDate}</td>
+  			</tr>
+  			</c:forEach>  		
+  		</tbody>
+  </table>
+<br/>
+ <nav>
+  <ul class="pager">
+  
+    <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span>이전</a></li>
+    <li class="next"><a href="#">내 구매이력 보기</a></li>
+    
+  </ul>
+</nav>
+<br/>
+</div>
+
+<form>
+<input type="hidden" id="currentPage" name="currentPage" value="1"/>
 </form>
 
-</div>
+<jsp:include page="../common/pageNavigator_new.jsp"/>
 
 </body>
 </html>

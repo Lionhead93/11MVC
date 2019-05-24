@@ -50,7 +50,16 @@
 	
 	$(function() {
 		
-		
+		$("a[href='#']:contains('내 구매이력 보기')").on("click", function(){
+			
+			self.location = "/purchase/listPurchase?menu=user"
+			
+		});
+		$(".previous").on("click", function(){
+			
+			history.go(-1);
+			
+		});
 		
 		
 	});

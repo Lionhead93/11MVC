@@ -52,7 +52,7 @@
 		  
 	  });
 	  
-	  $("li:contains('구매')").on("click", function(){
+	  $("#addPur").on("click", function(){
 		  
 		  self.location = "/purchase/addPurchaseView?prodNo=${product.prodNo}";
 		  
@@ -149,8 +149,8 @@
     <c:if test="${user.role=='admin'}">
     <li><a href="#">수정</a></li>
     </c:if>
-    <c:if test="${user.role=='user'}">
-    <li><a href="#">구매</a></li>
+    <c:if test="${user.role=='user' && product.amount!='0'}">
+    <li><a id="addPur" href="#">구매</a></li>
     </c:if>
   </ul>
 </nav>

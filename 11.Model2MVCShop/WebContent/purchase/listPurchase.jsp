@@ -91,7 +91,6 @@
 						},
 						success : function(JSONData) {
 							
-							alert(JSONData.tranNo);
 								
 								var display = "<div class='progress'><div class='progress-bar progress-bar-success' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: 60%;'>배송 중</div></div>";
 					  			  
@@ -172,6 +171,14 @@
 			
 		});
 		
+		$("td[class='text-danger']").on("click", function(){
+			
+			var tranNo = $(this).text().trim();
+			
+			self.location = "/purchase/getPurchase?tranNo="+tranNo;
+			
+		});
+		
 	});
 
 	</script>
@@ -232,7 +239,8 @@
 		
 		  <c:forEach var="purchase" items="${list}">
 			<tr>
-			  <td align="left" title="Click : 상세정보 확인">${purchase.tranNo}</td>
+			  <td align="left" title="Click : 상세정보 확인" class="text-danger">
+			  ${purchase.tranNo}</td>
 			  <td align="left">${purchase.purchaseProd.prodName}</td>
 			  <td align="left">${purchase.receiverName}</td>
 			  <td align="left">${purchase.amountPur}</td>

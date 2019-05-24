@@ -51,7 +51,7 @@ public class PurchaseController {
 	int pageSize;
 	
 	@RequestMapping("addPurchase")
-	public String addPurchase(@ModelAttribute("purchase") Purchase purchase,@ModelAttribute("product") Product product,HttpSession session) throws Exception {
+	public String addPurchase(@ModelAttribute("purchase") Purchase purchase,@ModelAttribute("product") Product product,HttpSession session,Model model) throws Exception {
 		
 		System.out.println("addPurchase.do////////");
 		System.out.println(purchase);
@@ -75,6 +75,8 @@ public class PurchaseController {
 				
 		purchase.setPurchaseProd(product);
 		purchase.setBuyer(buyer);
+		
+		model.addAttribute("purchase", purchase);
 		
 		purchaseService.addPurchase(purchase);
 		System.out.println(purchase);

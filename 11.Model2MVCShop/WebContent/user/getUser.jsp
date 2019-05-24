@@ -89,6 +89,8 @@
 		
 		<hr/>
 		
+		
+		
 		<div class="row">
 	  		<div class="col-xs-4 col-md-2"><strong>이 메 일</strong></div>
 			<div class="col-xs-8 col-md-4">${user.email}</div>
@@ -104,10 +106,19 @@
 		<hr/>
 		
 		<div class="row">
+	  		<div class="col-xs-4 col-md-2 "><strong>보유 마일리지</strong></div>
+			<div class="col-xs-8 col-md-4"><span class="text-danger">${user.mileage}원</span></div>
+		</div>
+		
+		<hr/>
+		
+		<div class="row">
 	  		<div class="col-md-12 text-center ">
 	  			<button type="button" class="btn btn-primary">회원정보수정</button>
 	  		</div>
 		</div>
+		
+		
 		
 		<br/>
 		
