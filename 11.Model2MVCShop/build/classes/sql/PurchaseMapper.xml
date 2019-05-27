@@ -39,7 +39,7 @@
 						<if test="purchaseProd.prodNo==0">null</if>
 						<if test="purchaseProd.prodNo!=0">#{purchaseProd.prodNo}</if>,
 						#{divyDate:VARCHAR} , #{divyRequest:VARCHAR} , SYSDATE , #{paymentOption:VARCHAR} , #{receiverName:VARCHAR} , 
-						#{receiverPhone:VARCHAR} , '1' , #{amountPur:VARCHAR})						
+						#{receiverPhone:VARCHAR} , #{tranCode:VARCHAR} , #{amountPur:VARCHAR})						
 	</insert>
 	
 	<update id="updatePurchase" parameterType="purchase">
@@ -71,11 +71,14 @@
 						RECEIVER_NAME , RECEIVER_PHONE , TRAN_STATUS_CODE , AMOUNTPUR 
 	  					FROM TRANSACTION
 	  					<where>
-	  					<if test="search.menu == 'user'">
+	  					<if test="search.menu == 'user' or search.menu == 'cart'">
 	  					buyer_id = #{buyer}
 	  					</if>
 	  					<if test="search.tranWhere != ''">
 												<choose>
+													<when test="search.tranWhere == 0">
+														and tran_status_code = '0'
+													</when>
 													<when test="search.tranWhere == 1">
 														and tran_status_code = '1'
 													</when>
@@ -87,6 +90,9 @@
 													</when>
 													<when test="search.tranWhere == 4">
 														and tran_status_code = '4'
+													</when>
+													<when test="search.tranWhere == 5">
+														and tran_status_code = '5'
 													</when>
 												</choose>
 						</if>
@@ -103,11 +109,14 @@
 						RECEIVER_NAME , RECEIVER_PHONE , TRAN_STATUS_CODE , AMOUNTPUR 
 	  					FROM TRANSACTION
 	  					<where>
-	  					<if test="search.menu == 'user'">
+	  					<if test="search.menu == 'user' or search.menu == 'cart'">
 	  					buyer_id = #{buyer}
 	  					</if>
 	  					<if test="search.tranWhere != ''">
 												<choose>
+													<when test="search.tranWhere == 0">
+														and tran_status_code = '0'
+													</when>
 													<when test="search.tranWhere == 1">
 														and tran_status_code = '1'
 													</when>
@@ -119,6 +128,9 @@
 													</when>
 													<when test="search.tranWhere == 4">
 														and tran_status_code = '4'
+													</when>
+													<when test="search.tranWhere == 5">
+														and tran_status_code = '5'
 													</when>
 												</choose>
 						</if>

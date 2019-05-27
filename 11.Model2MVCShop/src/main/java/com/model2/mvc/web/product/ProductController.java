@@ -80,7 +80,7 @@ public class ProductController {
 		
 		product.setManuDate(product.getManuDate().replace("-", ""));
 		product.setFileName(MultifileName);
-		
+		product.setProTranCode("1");
 		System.out.println(product);
 		productService.addProduct(product);
 		

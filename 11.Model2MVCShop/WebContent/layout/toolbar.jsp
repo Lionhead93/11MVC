@@ -56,6 +56,9 @@
 	                         <li><a href="#">로그인을 해주세요..</a></li>
 	                         </c:if>
 	                         <li class="divider"></li>
+	                         <c:if test="${sessionScope.user.role == 'user'}">
+	                         	<li><a href="#">내 마일리지 : <span class="text-danger">${user.mileage}</span></a></li>
+	                         </c:if>
 	                     </ul>
 	                 </li>
 	                 

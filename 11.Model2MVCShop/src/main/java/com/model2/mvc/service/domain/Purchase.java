@@ -30,6 +30,7 @@ public class Purchase {
 	public String getDivyAddr() {
 		return divyAddr;
 	}
+
 	public void setDivyAddr(String divyAddr) {
 		this.divyAddr = divyAddr;
 	}
@@ -109,6 +110,7 @@ public class Purchase {
 		return "Purchase [buyer=" + buyer + ", divyAddr=" + divyAddr + ", divyDate=" + divyDate + ", divyRequest="
 				+ divyRequest + ", orderDate=" + orderDate + ", paymentOption=" + paymentOption + ", purchaseProd="
 				+ purchaseProd + ", receiverName=" + receiverName + ", receiverPhone=" + receiverPhone + ", tranCode="
-				+ tranCode + ", amountPur=" + amountPur + ", useMileage=" + useMileage + ", tranNo=" + tranNo + "]";
+				+ tranCode + ", amountPur=" + amountPur + ", useMileage=" + useMileage + ", tranNo=" + tranNo
+				+ "]";
 	}
 }

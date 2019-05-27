@@ -85,6 +85,30 @@ public class PurchaseController {
 		return "forward:/purchase/addPurchaseViewResult.jsp";
 	}
 	
+	@RequestMapping("addCart")
+	public String addCart(@ModelAttribute("purchase") Purchase purchase,@ModelAttribute("product") Product product,HttpSession session,Model model) throws Exception {
+		
+		System.out.println("addCart.do////////");
+		
+		int prodNo = product.getProdNo();
+		System.out.println(product);
+		User buyer = (User)session.getAttribute("user");		
+				
+		product = productService.getProduct(prodNo);
+				
+		purchase.setPurchaseProd(product);
+		purchase.setBuyer(buyer);
+		purchase.setAmountPur("1");
+		purchase.setTranCode("0");
+		
+		purchaseService.addPurchase(purchase);
+		
+		System.out.println(purchase);
+		
+		
+		return "redirect:/purchase/listPurchase?menu=cart";
+	}
+	
 	@RequestMapping("addPurchaseView")
 	public String addPurchaseView(@RequestParam("prodNo") int prodNo,Model model) throws Exception {
 		
@@ -118,11 +142,18 @@ public class PurchaseController {
 		
 		User user = (User)session.getAttribute("user");
 		String userId = user.getUserId();
+		String result = "forward:/purchase/listPurchase.jsp";
 		
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
 		}
 		search.setPageSize(pageSize);
+		
+		if(search.getMenu().equals("cart")) {
+			search.setTranWhere("0");
+			result = "forward:/purchase/listCart.jsp";
+		}
+		
 		
 		Map<String , Object> smap = new HashMap<String,Object>();
 		smap.put("buyer", userId);
@@ -138,7 +169,7 @@ public class PurchaseController {
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("search", search);
 		
-		return "forward:/purchase/listPurchase.jsp";
+		return result;
 	}
 	
 	@RequestMapping("updatePurchase")

@@ -55,6 +55,7 @@ public class UserController {
 
 		System.out.println("/user/addUser : POST");
 		//Business Logic
+		user.setMileage(5000);
 		userService.addUser(user);
 		
 		return "redirect:/user/loginView.jsp";
