@@ -1,8 +1,15 @@
 package com.model2.mvc.web.product;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -62,6 +69,68 @@ public class ProductRestController {
 		System.out.println("json/getProduct/{prodNo}/////////");
 				
 		return productService.getProduct(prodNo);
+	}
+	
+	@RequestMapping(value = "json/Kakaopay/{prodNo}" ,method = RequestMethod.GET)
+	public String Kakaopay(@PathVariable("prodNo") int prodNo , HttpSession session) throws Exception {
+		
+		System.out.println("json/Kakaopay/{prodNo}/////////");
+		
+		Product product = productService.getProduct(prodNo);
+		
+        String daumOpenAPIURL = "https://kapi.kakao.com/v1/payment/ready";
+    	
+        // java API 를 이용 HttpRequest
+        URL url = new URL(daumOpenAPIURL);
+        HttpURLConnection con = (HttpURLConnection)url.openConnection();
+        con.setRequestMethod("POST");
+        con.setRequestProperty("Authorization", "KakaoAK 593d683e10b73b905dfb5f56dbd9782d");
+        con.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+        
+        con.setDoOutput(true);
+        
+        String jsonInputString = "cid=TC0ONETIME&partner_order_id=partner_order_id&partner_user_id=partner_user_id&item_name="+product.getProdName()
+        		+"&quantity=1&total_amount="+product.getPrice()+"&tax_free_amount=0&approval_url=http://192.168.0.45:8080/kakaoSuccess.jsp?prodNo="+prodNo+"&fail_url=http://192.168.0.45:8080/"
+        		+"&cancel_url=http://192.168.0.45:8080/";
+       
+        System.out.println("String : "+jsonInputString);
+        
+        byte[] input = jsonInputString.getBytes("utf-8");
+        
+        con.getOutputStream().write(input); // POST 호출
+        
+        int responseCode = con.getResponseCode();
+        
+        BufferedReader br = null;
+        
+        if(responseCode==200) { 
+            br = new BufferedReader(new InputStreamReader(con.getInputStream(),"UTF-8"));
+        } else {  // 에러 발생
+            br = new BufferedReader(new InputStreamReader(con.getErrorStream(),"UTF-8"));
+        }
+        
+        
+        //JSON Data 읽기
+        String jsonData = "";
+        StringBuffer response = new StringBuffer();
+        
+        while ((jsonData = br.readLine()) != null) {
+            response.append(jsonData);
+        }
+        
+        br.close();
+        
+        // Console 확인
+        System.out.println("code : "+responseCode);
+        System.out.println(response.toString());
+		
+        if(responseCode==200) {
+        	
+        	session.setAttribute("kakaoProd", prodNo);
+        	
+		}
+        
+		return response.toString();
 	}
 		
 	

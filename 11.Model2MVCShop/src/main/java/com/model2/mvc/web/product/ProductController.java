@@ -86,23 +86,7 @@ public class ProductController {
 		
 		return "redirect:/product/listProduct?menu=manage";
 	}
-//	public String addCart( HttpSession session, @RequestParam("prodNo") int prodNo) throws Exception {
-//		
-//		Product product = productService.getProduct(prodNo);
-//		
-//		List<Product> cart = new ArrayList<Product>();
-//		
-//		if(session.getAttribute("cart") != null) {
-//			cart = (List<Product>) session.getAttribute("cart");
-//		}
-//		
-//		cart.add(product);
-//		
-//		session.setAttribute("cart", cart);
-//		
-//		return null;
-//		
-//	}
+
 	@RequestMapping("getProduct")
 	public String getProduct(HttpServletResponse response,@CookieValue(value="history",required=false) Cookie cookie ,  @RequestParam("menu") String menu,
 							@RequestParam("prodNo") int prodNo , Model model) throws Exception {

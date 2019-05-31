@@ -48,7 +48,7 @@
 			<if test="paymentOption != null">payment_option = #{paymentOption} ,</if>
 			<if test="receiverName != null">receiver_name = #{receiverName} , </if>
 			<if test="receiverPhone != null">receiver_phone = #{receiverPhone} ,</if> 
-			<if test="divyDate != null">demailaddr = #{divyDate} ,</if>
+			<if test="divyDate != null">demailaddr = #{divyAddr} ,</if>
 			<if test="divyRequest != null">dlvy_request = #{divyRequest} ,</if> 
 			<if test="divyDate != null">DLVY_DATE = #{divyDate}</if>
 		</set> 
@@ -97,7 +97,7 @@
 												</choose>
 						</if>
 						</where>
-	  					order by ORDER_DATA desc
+	  					order by TRAN_STATUS_CODE
 	  					) inner_table
 						WHERE ROWNUM &lt;= #{search.endRowNum} )
 		WHERE row_seq BETWEEN #{search.startRowNum} AND #{search.endRowNum} 
@@ -135,7 +135,7 @@
 												</choose>
 						</if>
 						</where>
-	  					order by ORDER_DATA desc 
+	  					order by TRAN_STATUS_CODE
 	  				) countTable						
 	 </select>
 	 

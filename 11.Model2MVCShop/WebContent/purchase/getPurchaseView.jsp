@@ -46,12 +46,22 @@
 		  
 	  });
 	  
-	  $("a[href='#']").on("click", function(){
+	  $("a[href='#']:contains('구매정보수정')").on("click", function(){
 		 
 		  if(${purchase.tranCode=='1'}){
 			  self.location="/purchase/updatePurchaseView?tranNo=${purchase.tranNo}";			  
 		  }else{
 			  alert("배송 중이거나 배송완료 상품입니다.");			  
+		  }
+		  
+	  });
+	  
+	  $("a[href='#']:contains('구매취소')").on("click", function(){
+			 
+		  if(${purchase.tranCode=='1'}){
+			  self.location="/purchase/updateTranCode?tranNo=${purchase.tranNo}&tranCode=5";			  
+		  }else{
+			  alert("배송 중이거나 배송완료 상품입니다."); 			  
 		  }
 		  
 	  });
@@ -134,7 +144,11 @@
   <ul class="pager">
   
     <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span>이전</a></li>
+    
     <li><a href="#">구매정보수정</a></li>
+    
+    <li class="next"><a href="#" class='text-danger'>구매취소</a></li>
+  	
   </ul>
 </nav>
 		

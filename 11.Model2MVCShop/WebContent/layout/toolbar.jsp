@@ -89,6 +89,7 @@
 	                         
 	                         <c:if test="${sessionScope.user.role == 'user'}">
 	                           <li><a href="#">구매이력조회</a></li>
+	                           <li><a href="#">내 장바구니</a></li>
 	                         </c:if>
 	                         
 	                         <li class="divider"></li>
@@ -99,6 +100,7 @@
 	             
 	             <ul class="nav navbar-nav navbar-right">
 	                <c:if test="${!empty user}">
+	                	<li><a href="#">cart<span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></a></li>
 	                	<li><a href="#">로그아웃</a></li>
 	                </c:if>
 	                <c:if test="${empty user}">
@@ -171,6 +173,15 @@
 		 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
 				$(self.location).attr("href","/product/listReviewByUser");
 			});
+		 	$( "a:contains('내 장바구니')" ).on("click" , function() {
+		 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+				$(self.location).attr("href","/purchase/listPurchase?menu=cart");
+			});
+		 	$( "a[href='#']:contains('cart')" ).on("click" , function() {
+		 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+				$(self.location).attr("href","/purchase/listPurchase?menu=cart");
+			});
+		 	
 		
 		 });
 	</script>  

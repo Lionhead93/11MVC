@@ -18,6 +18,7 @@
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 	
 	<!-- Bootstrap Dropdown Hover CSS -->
    <link href="/css/animate.min.css" rel="stylesheet">
@@ -44,13 +45,43 @@
 					
 	$(function() {
 				 
-		$( "button" ).on("click" , function() {
+		$( "button:contains('수정')" ).on("click" , function() {
 					$("form").attr("method" , "POST").attr("action" , "/purchase/updatePurchase?tranNo=${purchase.tranNo}").submit();
 		});				 
 				 
-		$( "td.ct_btn01:contains('취소')" ).on("click" , function() {
+		$( "a[href='#']:contains('취소')" ).on("click" , function() {
 					 history.go(-1);
 		});
+		
+		$( "button:contains('주소찾기')" ).on("click" , function() {
+			
+			
+			new daum.Postcode({
+	            
+				oncomplete: function(data) {
+	               
+					var addr = ''; // 주소 변수
+	               
+					//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+	                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+	                    addr = data.roadAddress;
+	                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+	                    addr = data.jibunAddress;
+	                }
+					
+	                $("#divyAddr").val(addr);
+	                      
+	                
+	            }
+	        }).open();
+			
+		});
+		
+		$( "#divyDate" ).datepicker({
+	    	changeMonth: true,
+	        changeYear: true,
+	        dateFormat: 'yy-mm-dd'			        
+	    });
 	});
 		
 </script>
@@ -113,6 +144,7 @@
 		    <label for="divyAddr" class="col-sm-offset-1 col-sm-3 control-label">배송지</label>
 		    <div class="col-sm-4">
 		       <input type="text" class="form-control" id="divyAddr" name="divyAddr" value="${purchase.divyAddr}">
+		       <button type="button" class="btn btn-default"  >주소찾기</button>
 		    </div>
 		  </div>
 		<br/>
@@ -134,8 +166,8 @@
 		  
 		  <div class="form-group">
 		    <div class="col-sm-offset-4  col-sm-4 text-center">
-		      <button type="button" class="btn btn-primary"  >수 &nbsp;정</button>
-			  <a class="btn btn-primary btn" href="#" role="button">취&nbsp;소</a>
+		      <button type="button" class="btn btn-primary"  >수정</button>
+			  <a class="btn btn-primary btn" href="#" role="button">취소</a>
 		    </div>
 		  </div>
 		</form>

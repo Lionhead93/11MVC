@@ -58,6 +58,40 @@
 		  
 	  });
 	  
+	  $("a[href='#']:contains('카카오페이')").on("click", function(){
+		  
+		  if("${product.price}">1000000){
+			  alert("카카오페이는 100만원까지 가능합니다.");
+			  return;
+		  }
+			$.ajax({
+				url : "/product/json/Kakaopay/${product.prodNo}" ,
+				method : "GET" ,
+				dataType : "json" ,
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+				},
+              	success: function(data){      
+                  var url= data.next_redirect_pc_url;
+                  
+                  self.location = url;
+                  
+              	},
+             	 error: function(){              	
+                  alert('error');                   
+              	}              
+          	});		  
+	  	});
+	  
+		
+	  
+	  $("a[href='#']:contains('장바구니 담기')").on("click", function(){
+		  
+		  self.location = "/purchase/addCart?prodNo=${product.prodNo}";
+		  
+	  });
+	  
 	  $("li:contains('상품 후기 보기')").on("click", function(){
 		  
 		  self.location = "/product/listReview?prodNo=${product.prodNo}";
@@ -150,7 +184,9 @@
     <li><a href="#">수정</a></li>
     </c:if>
     <c:if test="${user.role=='user' && product.amount!='0'}">
-    <li><a id="addPur" href="#">구매</a></li>
+    <li><a id="addPur" href="#">바로구매</a></li>
+    <li><a href="#">카카오페이</a></li>
+    <li><a href="#">장바구니 담기</a></li>
     </c:if>
   </ul>
 </nav>

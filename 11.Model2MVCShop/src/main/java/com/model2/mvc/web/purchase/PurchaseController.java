@@ -1,6 +1,7 @@
 package com.model2.mvc.web.purchase;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -75,6 +77,7 @@ public class PurchaseController {
 				
 		purchase.setPurchaseProd(product);
 		purchase.setBuyer(buyer);
+		purchase.setTranCode("1");
 		
 		model.addAttribute("purchase", purchase);
 		
@@ -86,16 +89,17 @@ public class PurchaseController {
 	}
 	
 	@RequestMapping("addCart")
-	public String addCart(@ModelAttribute("purchase") Purchase purchase,@ModelAttribute("product") Product product,HttpSession session,Model model) throws Exception {
+	public String addCart(@RequestParam("prodNo") int prodNo,HttpSession session,Model model) throws Exception {
 		
 		System.out.println("addCart.do////////");
 		
-		int prodNo = product.getProdNo();
-		System.out.println(product);
+		System.out.println(prodNo);
 		User buyer = (User)session.getAttribute("user");		
 				
-		product = productService.getProduct(prodNo);
-				
+		Product product = productService.getProduct(prodNo);
+		
+		Purchase purchase = new Purchase();
+		
 		purchase.setPurchaseProd(product);
 		purchase.setBuyer(buyer);
 		purchase.setAmountPur("1");
@@ -182,6 +186,25 @@ public class PurchaseController {
 		return "redirect:/purchase/getPurchase?tranNo="+purchase.getTranNo();
 	}
 	
+	@RequestMapping("CartPurchase")
+	public String CartPurchase(@RequestParam("cartNo") List<String> noList, @ModelAttribute("purchase") Purchase purchase) throws Exception {
+		
+		System.out.println("CartPurchase.do////////");
+		System.out.println(noList);
+		System.out.println(purchase);
+		
+		for(int i=0;i<noList.size();i++) {
+			
+			purchase.setTranNo(Integer.parseInt(noList.get(i)));
+			purchase.setTranCode("1");		
+			purchaseService.updateTranceCode(purchase);			
+			purchaseService.updatePurchase(purchase);
+			
+		}
+		
+		return "redirect:/purchase/listPurchase?menu=user";
+	}
+	
 	
 	@RequestMapping("updatePurchaseView")
 	public String updatePurchaseView(@RequestParam("tranNo") String tmp,Model model) throws Exception {
@@ -191,7 +214,10 @@ public class PurchaseController {
 		int tranNo = Integer.parseInt(tmp);
 		
 		Purchase purchase = purchaseService.getPurchase(tranNo);
-		purchase.setDivyDate(purchase.getDivyDate().substring(0,10).replace("-", ""));
+		
+		if(purchase.getDivyDate() != null) {
+			purchase.setDivyDate(purchase.getDivyDate().substring(0,10).replace("-", ""));
+		}
 		
 		model.addAttribute("purchase", purchase);
 		

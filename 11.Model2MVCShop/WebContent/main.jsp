@@ -32,9 +32,40 @@
             padding-top : 70px;
         }
    	</style>
-   	
+   	 	
      <!--  ///////////////////////// JavaScript ////////////////////////// -->
-	 	
+	<script type="text/javascript">	 	
+	
+	$(function(){
+		
+				
+		 
+		$("button").on("click",function(){
+		    	
+			var search = $("#search").val().trim();
+			
+			$.ajax({
+	                url: "https://dapi.kakao.com/v2/search/image?query="+search ,
+	                type: "GET",
+	                dataType : "json" ,
+					headers : {
+						"Authorization" : "KakaoAK 786f6826580a4d7936f476cd6356278a"
+					},
+	                success: function(data){
+	                	
+	                    window.open(data.documents[0].image_url,'window팝업','width=300, height=300, menubar=no, status=no, toolbar=no');
+	                    
+	                },
+	                error: function(){
+	                    alert('error'); 
+	                }
+	            });
+		    	
+		});
+		
+	});
+	
+	</script>
 	
 </head>
 	
@@ -47,6 +78,10 @@
 	<!--  아래의 내용은 http://getbootstrap.com/getting-started/  참조 -->	
    	
    	<div class="container ">     
+    <div>
+   	<input type="text" id="search" name="search" placeholder="무엇이든지 검색">
+   	<button type="button" class="btn btn-primary"  >검색</button>
+   	</div>
       	<div class="page-header">
   			<h1>Model2 MVC Shop <small>developed by Nam</small></h1>
 		</div>
