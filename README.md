@@ -1,5 +1,5 @@
 # Model2 MVC Shop 
-online shopping platform
+### online shopping platform  
 ![Alt text](/mvcMain.PNG "Optional title")
 ## Stacks
 ### Client 
